@@ -1,13 +1,16 @@
+
 import React, { useState, useEffect } from 'react';
-import { motion } from 'framer-motion';
-import { Zap, Home, Sparkles, ChevronDown, Instagram } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { Home, Sparkles, ChevronDown, BookOpen, Users, X, Zap } from 'lucide-react';
 import { AuroraBackground } from './components/AuroraBackground';
 import { LogoMark } from './components/LogoMark';
-import { InstagramCarousel } from './components/InstagramCarousel';
+import { Manifesto } from './components/Manifesto';
+import { OrgChart } from './components/OrgChart';
 import { BRAND_COLORS, BRAND_ELEMENTS, BRAND_QUOTE } from './constants';
 
 const App: React.FC = () => {
   const [scrolled, setScrolled] = useState(false);
+  const [showStructure, setShowStructure] = useState(false);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -47,11 +50,55 @@ const App: React.FC = () => {
           </div>
           <div className="hidden md:flex items-center gap-8 text-sm font-medium text-heim-ice/80 uppercase tracking-widest">
             <a href="#concept" className="hover:text-heim-aurora transition-colors">Concept</a>
-            <a href="#social" className="hover:text-heim-aurora transition-colors">Story</a>
-            <a href="#colors" className="hover:text-heim-aurora transition-colors">Palette</a>
+            <a href="#manifesto" className="hover:text-heim-aurora transition-colors">Manifesto</a>
+            {/* Structure Trigger */}
+            <button 
+              onClick={() => setShowStructure(true)}
+              className="px-4 py-2 border border-heim-aurora/30 rounded-full text-heim-aurora hover:bg-heim-aurora hover:text-heim-fjord transition-all duration-300 flex items-center gap-2"
+            >
+              <Users size={16} />
+              STRUCTURE
+            </button>
           </div>
         </div>
       </nav>
+
+      {/* STRUCTURE MODAL */}
+      <AnimatePresence>
+        {showStructure && (
+          <motion.div 
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-[100] flex items-center justify-center p-4 md:p-10"
+          >
+            {/* Backdrop */}
+            <div 
+              className="absolute inset-0 bg-heim-fjord/95 backdrop-blur-xl"
+              onClick={() => setShowStructure(false)}
+            />
+            
+            {/* Modal Content */}
+            <motion.div 
+              initial={{ scale: 0.95, opacity: 0, y: 20 }}
+              animate={{ scale: 1, opacity: 1, y: 0 }}
+              exit={{ scale: 0.95, opacity: 0, y: 20 }}
+              className="relative z-10 w-full max-w-7xl h-full max-h-full overflow-y-auto custom-scrollbar"
+            >
+              <button 
+                onClick={() => setShowStructure(false)}
+                className="absolute right-0 top-0 p-3 bg-white/10 hover:bg-heim-aurora hover:text-heim-fjord rounded-full transition-colors z-50"
+              >
+                <X size={24} />
+              </button>
+              
+              <div className="pt-12 pb-20">
+                 <OrgChart />
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       <main className="relative z-10">
         
@@ -101,7 +148,7 @@ const App: React.FC = () => {
           </motion.div>
         </section>
 
-        {/* QUOTE SECTION */}
+        {/* QUOTE SECTION - UPDATED DESIGN */}
         <section id="vision" className="py-32 px-6 container mx-auto text-center relative">
           <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-3/4 h-1/2 bg-heim-aurora/5 blur-[100px] rounded-full pointer-events-none" />
           
@@ -112,33 +159,67 @@ const App: React.FC = () => {
             variants={fadeIn}
             className="relative max-w-4xl mx-auto"
           >
-            <h2 className="text-3xl md:text-5xl font-display leading-tight mb-8 text-transparent bg-clip-text bg-gradient-to-r from-white via-heim-ice to-white">
-              "{BRAND_QUOTE.main}"
-            </h2>
-            <p className="text-lg text-heim-ice/70 font-light italic">
+            <div className="flex flex-col items-center gap-6 md:gap-10 mb-12">
+               <motion.div 
+                 initial={{ opacity: 0, y: 10 }}
+                 whileInView={{ opacity: 1, y: 0 }}
+                 viewport={{ once: true }}
+                 transition={{ delay: 0.1 }}
+                 className="text-2xl md:text-4xl font-light tracking-[0.15em] leading-relaxed text-gray-200"
+               >
+                 以北歐文明為 <span className="text-heim-aurora font-medium inline-block transform hover:scale-105 transition-transform duration-300">家園</span>
+               </motion.div>
+               <motion.div 
+                 initial={{ opacity: 0, y: 10 }}
+                 whileInView={{ opacity: 1, y: 0 }}
+                 viewport={{ once: true }}
+                 transition={{ delay: 0.3 }}
+                 className="text-2xl md:text-4xl font-light tracking-[0.15em] leading-relaxed text-gray-200"
+               >
+                 以能源為 <span className="text-heim-ice font-medium inline-block transform hover:scale-105 transition-transform duration-300">對話</span>
+               </motion.div>
+               <motion.div 
+                 initial={{ opacity: 0, y: 10 }}
+                 whileInView={{ opacity: 1, y: 0 }}
+                 viewport={{ once: true }}
+                 transition={{ delay: 0.5 }}
+                 className="text-2xl md:text-4xl font-light tracking-[0.15em] leading-relaxed text-gray-200"
+               >
+                 以光為 <span className="text-white font-medium inline-block border-b-2 border-heim-aurora/30 pb-1 transform hover:scale-105 transition-transform duration-300">啟示</span>
+               </motion.div>
+            </div>
+            
+            <motion.p 
+              initial={{ opacity: 0 }}
+              whileInView={{ opacity: 1 }}
+              viewport={{ once: true }}
+              transition={{ delay: 0.8 }}
+              className="text-lg text-heim-ice/50 font-light font-display uppercase tracking-widest"
+            >
               {BRAND_QUOTE.sub}
-            </p>
+            </motion.p>
           </motion.div>
         </section>
 
-        {/* SOCIAL MEDIA / STORY SECTION */}
-        <section id="social" className="py-24 px-6 bg-heim-fjord/30 border-t border-white/5">
-           <div className="container mx-auto flex flex-col items-center">
+        {/* MANIFESTO STORY SECTION - INTERACTIVE */}
+        <section id="manifesto" className="py-24 px-6 bg-heim-fjord/30 border-t border-white/5 overflow-hidden">
+           <div className="container mx-auto">
             <motion.div 
               initial="hidden"
               whileInView="visible"
               viewport={{ once: true }}
               variants={fadeIn}
-              className="mb-12 text-center"
+              className="mb-16 text-center"
             >
               <div className="flex items-center justify-center gap-2 mb-2 text-heim-aurora">
-                <Instagram size={20} />
+                <BookOpen size={20} />
                 <h3 className="text-sm font-bold uppercase tracking-widest">Manifesto</h3>
               </div>
               <h2 className="text-3xl font-display font-bold">The Story of Heim × Energi</h2>
+              <p className="mt-4 text-heim-ice/50 text-sm tracking-wide">CLICK HEADINGS TO EXPAND</p>
             </motion.div>
             
-            <InstagramCarousel />
+            <Manifesto />
            </div>
         </section>
 

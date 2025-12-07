@@ -1,3 +1,4 @@
+
 export interface ColorDefinition {
   name: string;
   hex: string;
@@ -28,8 +29,17 @@ export interface SlideBlock {
 export interface InstagramSlide {
   id: number;
   layout: 'cover' | 'standard' | 'quote' | 'final';
+  heading?: string; // New short title for the simplified view
   title?: string;
   subtitle?: string;
   blocks: SlideBlock[];
   footer?: string;
+}
+
+export interface Team {
+  id: string;
+  name: string;
+  enName: string;
+  role: 'research' | 'internal' | 'external' | 'publicity';
+  description: string;
 }

@@ -1,4 +1,5 @@
-import { ColorDefinition, BrandElement, InstagramSlide } from './types';
+
+import { ColorDefinition, BrandElement, InstagramSlide, Team } from './types';
 
 export const BRAND_COLORS: ColorDefinition[] = [
   {
@@ -52,7 +53,7 @@ export const BRAND_ELEMENTS: BrandElement[] = [
 ];
 
 export const BRAND_QUOTE = {
-  main: "以北歐文明為“家園”，以能源為“對話”，以光為“啟示”。",
+  main: "以北歐文明為家園，以能源為對話，以光為啟示。",
   sub: "Using Nordic civilization as home, energy as dialogue, and light as revelation."
 };
 
@@ -60,6 +61,7 @@ export const INSTAGRAM_SLIDES: InstagramSlide[] = [
   {
     id: 1,
     layout: 'cover',
+    heading: "DEFINITION",
     title: "Heim is the home we inherit.\nEnergi is the power we create.",
     blocks: [
       {
@@ -71,6 +73,7 @@ export const INSTAGRAM_SLIDES: InstagramSlide[] = [
   {
     id: 2,
     layout: 'standard',
+    heading: "IDENTITY",
     title: "Youth are not observers.\nYouth are participants.",
     blocks: [
       {
@@ -82,39 +85,47 @@ export const INSTAGRAM_SLIDES: InstagramSlide[] = [
   {
     id: 3,
     layout: 'standard',
-    title: "Heim × Energi 誕生於這樣的信念——",
+    heading: "SYNTHESIS",
+    title: "When Heritage meets Power.",
     blocks: [
       {
-        cn: "Heim，是我們共享的家園，不分國界；\nEnergi，是每一個青年內心的力量，是創造、連結與改變的能量。",
-        en: "Heim × Energi was born from this belief—\nHeim is the home we share beyond borders;\nEnergi is the power within every young person—the power to create, to connect, and to change."
+        cn: "單獨的 Heim 只是歷史；單獨的 Energi 只是物理。\n但當兩者結合，我們便擁有了解決問題的路徑。",
+        en: "Heim alone is history. Energi alone is physics.\nBut when combined, we possess the path to solve tomorrow's problems."
+      },
+      {
+        cn: "這不只是關於能源轉型，更是關於「文明如何使用能量」的哲學思考。",
+        en: "It is not just about energy transition, but a philosophical inquiry into how civilization wields power."
       }
     ]
   },
   {
     id: 4,
     layout: 'standard',
+    heading: "PERSPECTIVE",
     subtitle: "Perspective",
     blocks: [
       {
         cn: "我們相信，不同文化、不同專業的青年在彼此相遇時，世界會出現新的可能性。交流不只是理解，更是互補；合作不只是並肩，更是共同設計未來。",
-        en: "We believe that when young people of different cultures and different disciplines meet, new possibilities for the world emerge. Exchange is not only understanding—it is complementarity. Collaboration is not only standing together—it is co-designing the future."
+        en: "We believe that when young people of different cultures and different disciplines meet, new possibilities for the world emerge."
       }
     ]
   },
   {
     id: 5,
     layout: 'standard',
+    heading: "ACTION",
     subtitle: "Action",
     blocks: [
       {
         cn: "於是我們走向世界，也把世界帶回彼此。用理性的思考、文化的視野、與青年對未來的想像力，一起思考能源、城市、自然與文明的下一個版本。",
-        en: "So we step into the world, and bring the world back to one another—using engineering logic, cultural vision, and the imagination of youth to rethink the next version of energy, cities, nature, and human civilization."
+        en: "So we step into the world, and bring the world back to one another—rethinking the next version of energy, cities, nature, and human civilization."
       }
     ]
   },
   {
     id: 6,
     layout: 'quote',
+    heading: "MANIFESTO",
     title: "Youth are participants.",
     blocks: [
       {
@@ -126,6 +137,7 @@ export const INSTAGRAM_SLIDES: InstagramSlide[] = [
   {
     id: 7,
     layout: 'final',
+    heading: "VISION",
     title: "Heim × Energi",
     subtitle: "啟北之光",
     blocks: [
@@ -134,5 +146,36 @@ export const INSTAGRAM_SLIDES: InstagramSlide[] = [
         en: "Heim × Energi | Light of the North\nA global youth initiative meant to be continued."
       }
     ]
+  }
+];
+
+export const TEAMS: Team[] = [
+  {
+    id: '01',
+    name: '調研組',
+    enName: 'Insight',
+    role: 'research',
+    description: '深入議題核心，挖掘數據背後的真相。如同透鏡，聚焦理性之光。'
+  },
+  {
+    id: '02',
+    name: '內聯組',
+    enName: 'Cohesion',
+    role: 'internal',
+    description: '建立團隊連結，鞏固組織結構。如同繩結，編織共同的家園。'
+  },
+  {
+    id: '03',
+    name: '外聯組',
+    enName: 'Outreach',
+    role: 'external',
+    description: '開拓外部合作，搭建溝通橋樑。如同羅盤，指引向外的航道。'
+  },
+  {
+    id: '04',
+    name: '宣傳組',
+    enName: 'Voice',
+    role: 'publicity',
+    description: '傳遞理念之火，擴大影響漣漪。如同燈塔，發送改變的訊號。'
   }
 ];
