@@ -1,16 +1,19 @@
 
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Home, Sparkles, ChevronDown, BookOpen, Users, X, Zap } from 'lucide-react';
+import { Home, Sparkles, ChevronDown, BookOpen, Users, X, Zap, Menu, Book } from 'lucide-react';
 import { AuroraBackground } from './components/AuroraBackground';
 import { LogoMark } from './components/LogoMark';
 import { Manifesto } from './components/Manifesto';
 import { OrgChart } from './components/OrgChart';
+import { TeamRecord } from './components/TeamRecord';
 import { BRAND_COLORS, BRAND_ELEMENTS, BRAND_QUOTE } from './constants';
 
 const App: React.FC = () => {
   const [scrolled, setScrolled] = useState(false);
   const [showStructure, setShowStructure] = useState(false);
+  const [showRecords, setShowRecords] = useState(false);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -40,27 +43,99 @@ const App: React.FC = () => {
       <AuroraBackground />
 
       {/* Navigation / Header */}
-      <nav className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${scrolled ? 'bg-heim-fjord/80 backdrop-blur-md py-4 border-b border-white/5' : 'bg-transparent py-8'}`}>
+      <nav className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${scrolled || mobileMenuOpen ? 'bg-heim-fjord/90 backdrop-blur-md py-4 border-b border-white/5' : 'bg-transparent py-6 md:py-8'}`}>
         <div className="container mx-auto px-6 flex justify-between items-center">
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-3 relative z-50">
             <LogoMark scale={0.4} />
             <span className="font-display font-bold text-xl tracking-wider text-white">
               HEIM <span className="text-heim-aurora">×</span> ENERGI
             </span>
           </div>
+
+          {/* Desktop Navigation */}
           <div className="hidden md:flex items-center gap-8 text-sm font-medium text-heim-ice/80 uppercase tracking-widest">
             <a href="#concept" className="hover:text-heim-aurora transition-colors">Concept</a>
             <a href="#manifesto" className="hover:text-heim-aurora transition-colors">Manifesto</a>
-            {/* Structure Trigger */}
-            <button 
-              onClick={() => setShowStructure(true)}
-              className="px-4 py-2 border border-heim-aurora/30 rounded-full text-heim-aurora hover:bg-heim-aurora hover:text-heim-fjord transition-all duration-300 flex items-center gap-2"
-            >
-              <Users size={16} />
-              STRUCTURE
-            </button>
+            
+            {/* Action Buttons */}
+            <div className="flex items-center gap-4 ml-4">
+              <button 
+                onClick={() => setShowRecords(true)}
+                className="px-4 py-2 border border-white/20 rounded-full text-white hover:bg-white/10 transition-all duration-300 flex items-center gap-2"
+              >
+                <Book size={16} />
+                支隊紀錄
+              </button>
+              
+              <button 
+                onClick={() => setShowStructure(true)}
+                className="px-4 py-2 border border-heim-aurora/30 rounded-full text-heim-aurora hover:bg-heim-aurora hover:text-heim-fjord transition-all duration-300 flex items-center gap-2"
+              >
+                <Users size={16} />
+                STRUCTURE
+              </button>
+            </div>
           </div>
+
+          {/* Mobile Menu Toggle */}
+          <button 
+            className="md:hidden relative z-50 p-2 text-heim-ice hover:text-white transition-colors"
+            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+          >
+            {mobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
+          </button>
         </div>
+
+        {/* Mobile Navigation Menu */}
+        <AnimatePresence>
+          {mobileMenuOpen && (
+            <motion.div
+              initial={{ opacity: 0, y: -20 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -20 }}
+              className="absolute top-0 left-0 right-0 bg-heim-fjord border-b border-white/10 pt-24 pb-8 px-6 md:hidden shadow-2xl flex flex-col gap-4"
+            >
+              <a 
+                href="#concept" 
+                className="text-lg font-display font-bold text-white/80 hover:text-heim-aurora"
+                onClick={() => setMobileMenuOpen(false)}
+              >
+                Concept
+              </a>
+              <a 
+                href="#manifesto" 
+                className="text-lg font-display font-bold text-white/80 hover:text-heim-aurora"
+                onClick={() => setMobileMenuOpen(false)}
+              >
+                Manifesto
+              </a>
+              
+              <div className="h-px bg-white/10 my-2" />
+              
+              <button 
+                onClick={() => {
+                  setShowRecords(true);
+                  setMobileMenuOpen(false);
+                }}
+                className="w-full py-4 border border-white/20 rounded-xl text-white bg-white/5 hover:bg-white/10 transition-all duration-300 flex items-center justify-center gap-2 font-bold tracking-widest uppercase"
+              >
+                <Book size={20} />
+                支隊紀錄
+              </button>
+              
+              <button 
+                onClick={() => {
+                  setShowStructure(true);
+                  setMobileMenuOpen(false);
+                }}
+                className="w-full py-4 border border-heim-aurora/30 rounded-xl text-heim-aurora bg-heim-aurora/5 hover:bg-heim-aurora hover:text-heim-fjord transition-all duration-300 flex items-center justify-center gap-2 font-bold tracking-widest uppercase"
+              >
+                <Users size={20} />
+                Structure
+              </button>
+            </motion.div>
+          )}
+        </AnimatePresence>
       </nav>
 
       {/* STRUCTURE MODAL */}
@@ -70,30 +145,59 @@ const App: React.FC = () => {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 z-[100] flex items-center justify-center p-4 md:p-10"
+            className="fixed inset-0 z-[100] flex items-start md:items-center justify-center p-0 md:p-10"
           >
-            {/* Backdrop */}
             <div 
               className="absolute inset-0 bg-heim-fjord/95 backdrop-blur-xl"
               onClick={() => setShowStructure(false)}
             />
-            
-            {/* Modal Content */}
             <motion.div 
               initial={{ scale: 0.95, opacity: 0, y: 20 }}
               animate={{ scale: 1, opacity: 1, y: 0 }}
               exit={{ scale: 0.95, opacity: 0, y: 20 }}
-              className="relative z-10 w-full max-w-7xl h-full max-h-full overflow-y-auto custom-scrollbar"
+              className="relative z-10 w-full h-full md:max-w-7xl md:h-auto md:max-h-[90vh] overflow-y-auto custom-scrollbar bg-heim-fjord md:bg-transparent"
             >
               <button 
                 onClick={() => setShowStructure(false)}
-                className="absolute right-0 top-0 p-3 bg-white/10 hover:bg-heim-aurora hover:text-heim-fjord rounded-full transition-colors z-50"
+                className="fixed md:absolute right-4 top-4 md:right-0 md:top-0 p-3 bg-heim-fjord border border-white/10 md:border-none md:bg-white/10 hover:bg-heim-aurora hover:text-heim-fjord rounded-full transition-colors z-50 shadow-lg"
               >
                 <X size={24} />
               </button>
-              
-              <div className="pt-12 pb-20">
+              <div className="pt-20 pb-20 px-4 md:px-0 md:pt-12">
                  <OrgChart />
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* RECORDS MODAL */}
+      <AnimatePresence>
+        {showRecords && (
+          <motion.div 
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-[100] flex items-start md:items-center justify-center p-0 md:p-10"
+          >
+            <div 
+              className="absolute inset-0 bg-heim-fjord/95 backdrop-blur-xl"
+              onClick={() => setShowRecords(false)}
+            />
+            <motion.div 
+              initial={{ scale: 0.95, opacity: 0, y: 20 }}
+              animate={{ scale: 1, opacity: 1, y: 0 }}
+              exit={{ scale: 0.95, opacity: 0, y: 20 }}
+              className="relative z-10 w-full h-full md:max-w-6xl md:h-auto md:max-h-[90vh] overflow-y-auto custom-scrollbar bg-heim-fjord md:bg-transparent"
+            >
+              <button 
+                onClick={() => setShowRecords(false)}
+                className="fixed md:absolute right-4 top-4 md:right-0 md:top-0 p-3 bg-heim-fjord border border-white/10 md:border-none md:bg-white/10 hover:bg-heim-aurora hover:text-heim-fjord rounded-full transition-colors z-50 shadow-lg"
+              >
+                <X size={24} />
+              </button>
+              <div className="pt-20 pb-20 px-4 md:px-0 md:pt-12">
+                 <TeamRecord />
               </div>
             </motion.div>
           </motion.div>

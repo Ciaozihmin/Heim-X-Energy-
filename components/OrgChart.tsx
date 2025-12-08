@@ -48,7 +48,7 @@ const EditableField: React.FC<EditableFieldProps> = ({
            {/* Edit Button */}
            <button 
              onClick={onToggleLock}
-             className="absolute right-2 top-2 p-1.5 rounded-full bg-heim-fjord/80 text-heim-aurora opacity-0 group-hover:opacity-100 transition-all hover:bg-heim-aurora hover:text-heim-fjord transform hover:scale-110"
+             className="absolute right-2 top-2 p-1.5 rounded-full bg-heim-fjord/80 text-heim-aurora opacity-100 md:opacity-0 group-hover:opacity-100 transition-all hover:bg-heim-aurora hover:text-heim-fjord transform hover:scale-110"
              title="Edit"
            >
              <Edit2 size={14} />
@@ -62,7 +62,7 @@ const EditableField: React.FC<EditableFieldProps> = ({
               value={value}
               onChange={onChange}
               placeholder={placeholder}
-              className="w-full h-32 md:h-40 bg-black/20 border-b border-white/10 p-4 pl-10 text-sm text-gray-300 placeholder-heim-ice/20 focus:outline-none focus:border-heim-aurora focus:bg-white/5 transition-all resize-none rounded-t-lg"
+              className="w-full h-32 md:h-40 bg-black/20 border-b border-white/10 p-4 pl-10 text-base md:text-sm text-gray-300 placeholder-heim-ice/20 focus:outline-none focus:border-heim-aurora focus:bg-white/5 transition-all resize-none rounded-t-lg"
             />
           ) : (
             <input
@@ -70,7 +70,7 @@ const EditableField: React.FC<EditableFieldProps> = ({
               value={value}
               onChange={onChange}
               placeholder={placeholder}
-              className="w-full bg-black/20 border-b border-white/10 px-10 py-3 text-white placeholder-heim-ice/30 focus:outline-none focus:border-heim-aurora focus:bg-white/5 transition-all duration-300 font-sans text-center md:text-left rounded-t-lg"
+              className="w-full bg-black/20 border-b border-white/10 px-10 py-3 text-white placeholder-heim-ice/30 focus:outline-none focus:border-heim-aurora focus:bg-white/5 transition-all duration-300 font-sans text-center md:text-left rounded-t-lg text-base md:text-sm"
             />
           )}
           
@@ -146,7 +146,7 @@ export const OrgChart: React.FC = () => {
   };
 
   return (
-    <div className="w-full max-w-7xl mx-auto">
+    <div className="w-full max-w-7xl mx-auto pb-10">
        
        <div className="text-center mb-12">
           <span className="text-heim-aurora text-xs font-bold uppercase tracking-[0.3em] px-4 py-1 border border-heim-aurora/30 rounded-full">
