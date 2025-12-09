@@ -182,11 +182,11 @@ export const KickoffMeeting: React.FC = () => {
                 <ul className="space-y-3 text-sm text-gray-300">
                   <li className="flex gap-2">
                     <CheckCircle size={16} className="mt-0.5 text-heim-ice flex-shrink-0" /> 
-                    <span>大家要玩得開心，享受整個旅途</span>
+                    <span>保持熱忱，享受探索與交流的旅程</span>
                   </li>
                   <li className="flex gap-2">
                     <CheckCircle size={16} className="mt-0.5 text-heim-ice flex-shrink-0" /> 
-                    <span>互助合作：將中國優勢帶給對方，北歐優勢帶給中國</span>
+                    <span>優勢互補：促進中國與北歐在文化與專業上的雙向賦能</span>
                   </li>
                   <li className="flex gap-2">
                     <CheckCircle size={16} className="mt-0.5 text-heim-ice flex-shrink-0" /> 
@@ -202,11 +202,11 @@ export const KickoffMeeting: React.FC = () => {
                 <ul className="space-y-3 text-sm text-gray-300">
                    <li className="flex gap-2">
                     <CheckCircle size={16} className="mt-0.5 text-white/50 flex-shrink-0" /> 
-                    <span>能不能得獎就看我們怎麼包裝自己的成果</span>
+                    <span>成果轉化：將實踐過程提煉為具備社會影響力的價值論述</span>
                   </li>
                   <li className="flex gap-2">
                     <CheckCircle size={16} className="mt-0.5 text-white/50 flex-shrink-0" /> 
-                    <span>傳承 (Legacy)</span>
+                    <span>傳承 (Legacy)：建立可持續運作的知識與合作網絡</span>
                   </li>
                 </ul>
               </div>
@@ -243,7 +243,7 @@ export const KickoffMeeting: React.FC = () => {
                 leaders={['王欣怡', '紀強']}
                 members={['向乐尧', '王莹']}
                 tasks={[
-                  '搜集機構給外聯聯繫（基於喵老師資料）', 
+                  '搜集機構名單供外聯聯繫（整合現有指導資源）', 
                   '針對組織進行調研（預調研報告）', 
                   '制定核心行程',
                   '多做可視化圖表 (工程/人文/青年/SDGs)'
@@ -286,7 +286,7 @@ export const KickoffMeeting: React.FC = () => {
                     <li>採訪發問卷（主軸）</li>
                     <li>紀錄片拍攝</li>
                     <li>經營媒體帳戶</li>
-                    <li>搶推送頭條</li>
+                    <li>爭取重點宣傳曝光</li>
                   </ul>
                </div>
                <div>

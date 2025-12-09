@@ -1,18 +1,20 @@
 
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Home, Sparkles, ChevronDown, BookOpen, Users, X, Zap, Menu, Book } from 'lucide-react';
+import { Home, Sparkles, ChevronDown, BookOpen, Users, X, Zap, Menu, Book, ClipboardList } from 'lucide-react';
 import { AuroraBackground } from './components/AuroraBackground';
 import { LogoMark } from './components/LogoMark';
-import { Manifesto } from './components/Manifesto';
 import { OrgChart } from './components/OrgChart';
 import { TeamRecord } from './components/TeamRecord';
+import { ProblemLog } from './components/ProblemLog';
+import { Manifesto } from './components/Manifesto';
 import { BRAND_COLORS, BRAND_ELEMENTS, BRAND_QUOTE } from './constants';
 
 const App: React.FC = () => {
   const [scrolled, setScrolled] = useState(false);
   const [showStructure, setShowStructure] = useState(false);
   const [showRecords, setShowRecords] = useState(false);
+  const [showProblems, setShowProblems] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   useEffect(() => {
@@ -25,7 +27,11 @@ const App: React.FC = () => {
 
   const fadeIn = {
     hidden: { opacity: 0, y: 20 },
-    visible: { opacity: 1, y: 0, transition: { duration: 0.8 } }
+    visible: { 
+      opacity: 1, 
+      y: 0, 
+      transition: { duration: 0.8 } 
+    }
   };
 
   const staggerContainer = {
@@ -55,7 +61,7 @@ const App: React.FC = () => {
           {/* Desktop Navigation */}
           <div className="hidden md:flex items-center gap-8 text-sm font-medium text-heim-ice/80 uppercase tracking-widest">
             <a href="#concept" className="hover:text-heim-aurora transition-colors">Concept</a>
-            <a href="#manifesto" className="hover:text-heim-aurora transition-colors">Manifesto</a>
+            <a href="#colors" className="hover:text-heim-aurora transition-colors">Colors</a>
             
             {/* Action Buttons */}
             <div className="flex items-center gap-4 ml-4">
@@ -73,6 +79,14 @@ const App: React.FC = () => {
               >
                 <Users size={16} />
                 STRUCTURE
+              </button>
+
+              <button 
+                onClick={() => setShowProblems(true)}
+                className="px-4 py-2 border border-heim-ice/30 bg-heim-ice/5 rounded-full text-heim-ice hover:bg-heim-ice hover:text-heim-fjord transition-all duration-300 flex items-center gap-2"
+              >
+                <ClipboardList size={16} />
+                問題紀錄
               </button>
             </div>
           </div>
@@ -103,11 +117,11 @@ const App: React.FC = () => {
                 Concept
               </a>
               <a 
-                href="#manifesto" 
+                href="#colors" 
                 className="text-lg font-display font-bold text-white/80 hover:text-heim-aurora"
                 onClick={() => setMobileMenuOpen(false)}
               >
-                Manifesto
+                Colors
               </a>
               
               <div className="h-px bg-white/10 my-2" />
@@ -132,6 +146,17 @@ const App: React.FC = () => {
               >
                 <Users size={20} />
                 Structure
+              </button>
+
+              <button 
+                onClick={() => {
+                  setShowProblems(true);
+                  setMobileMenuOpen(false);
+                }}
+                className="w-full py-4 border border-heim-ice/30 rounded-xl text-heim-ice bg-heim-ice/10 hover:bg-heim-ice hover:text-heim-fjord transition-all duration-300 flex items-center justify-center gap-2 font-bold tracking-widest uppercase"
+              >
+                <ClipboardList size={20} />
+                問題紀錄
               </button>
             </motion.div>
           )}
@@ -204,6 +229,39 @@ const App: React.FC = () => {
         )}
       </AnimatePresence>
 
+      {/* PROBLEMS MODAL */}
+      <AnimatePresence>
+        {showProblems && (
+          <motion.div 
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-[100] flex items-start md:items-center justify-center p-0 md:p-10"
+          >
+            <div 
+              className="absolute inset-0 bg-heim-fjord/95 backdrop-blur-xl"
+              onClick={() => setShowProblems(false)}
+            />
+            <motion.div 
+              initial={{ scale: 0.95, opacity: 0, y: 20 }}
+              animate={{ scale: 1, opacity: 1, y: 0 }}
+              exit={{ scale: 0.95, opacity: 0, y: 20 }}
+              className="relative z-10 w-full h-full md:max-w-5xl md:h-auto md:max-h-[90vh] overflow-y-auto custom-scrollbar bg-heim-fjord md:bg-transparent"
+            >
+              <button 
+                onClick={() => setShowProblems(false)}
+                className="fixed md:absolute right-4 top-4 md:right-0 md:top-0 p-3 bg-heim-fjord border border-white/10 md:border-none md:bg-white/10 hover:bg-heim-ice hover:text-heim-fjord rounded-full transition-colors z-50 shadow-lg"
+              >
+                <X size={24} />
+              </button>
+              <div className="pt-20 pb-20 px-4 md:px-0 md:pt-12">
+                 <ProblemLog />
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
       <main className="relative z-10">
         
         {/* HERO SECTION */}
@@ -252,14 +310,14 @@ const App: React.FC = () => {
           </motion.div>
         </section>
 
-        {/* QUOTE SECTION - UPDATED DESIGN */}
-        <section id="vision" className="py-32 px-6 container mx-auto text-center relative">
+        {/* QUOTE SECTION */}
+        <section id="vision" className="py-24 px-6 container mx-auto text-center relative">
           <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-3/4 h-1/2 bg-heim-aurora/5 blur-[100px] rounded-full pointer-events-none" />
           
           <motion.div
             initial="hidden"
             whileInView="visible"
-            viewport={{ once: true }}
+            viewport={{ once: true, amount: 0.2 }}
             variants={fadeIn}
             className="relative max-w-4xl mx-auto"
           >
@@ -267,7 +325,7 @@ const App: React.FC = () => {
                <motion.div 
                  initial={{ opacity: 0, y: 10 }}
                  whileInView={{ opacity: 1, y: 0 }}
-                 viewport={{ once: true }}
+                 viewport={{ once: true, amount: 0.2 }}
                  transition={{ delay: 0.1 }}
                  className="text-2xl md:text-4xl font-light tracking-[0.15em] leading-relaxed text-gray-200"
                >
@@ -276,7 +334,7 @@ const App: React.FC = () => {
                <motion.div 
                  initial={{ opacity: 0, y: 10 }}
                  whileInView={{ opacity: 1, y: 0 }}
-                 viewport={{ once: true }}
+                 viewport={{ once: true, amount: 0.2 }}
                  transition={{ delay: 0.3 }}
                  className="text-2xl md:text-4xl font-light tracking-[0.15em] leading-relaxed text-gray-200"
                >
@@ -285,7 +343,7 @@ const App: React.FC = () => {
                <motion.div 
                  initial={{ opacity: 0, y: 10 }}
                  whileInView={{ opacity: 1, y: 0 }}
-                 viewport={{ once: true }}
+                 viewport={{ once: true, amount: 0.2 }}
                  transition={{ delay: 0.5 }}
                  className="text-2xl md:text-4xl font-light tracking-[0.15em] leading-relaxed text-gray-200"
                >
@@ -296,7 +354,7 @@ const App: React.FC = () => {
             <motion.p 
               initial={{ opacity: 0 }}
               whileInView={{ opacity: 1 }}
-              viewport={{ once: true }}
+              viewport={{ once: true, amount: 0.2 }}
               transition={{ delay: 0.8 }}
               className="text-lg text-heim-ice/50 font-light font-display uppercase tracking-widest"
             >
@@ -305,39 +363,22 @@ const App: React.FC = () => {
           </motion.div>
         </section>
 
-        {/* MANIFESTO STORY SECTION - INTERACTIVE */}
-        <section id="manifesto" className="py-24 px-6 bg-heim-fjord/30 border-t border-white/5 overflow-hidden">
-           <div className="container mx-auto">
-            <motion.div 
-              initial="hidden"
-              whileInView="visible"
-              viewport={{ once: true }}
-              variants={fadeIn}
-              className="mb-16 text-center"
-            >
-              <div className="flex items-center justify-center gap-2 mb-2 text-heim-aurora">
-                <BookOpen size={20} />
-                <h3 className="text-sm font-bold uppercase tracking-widest">Manifesto</h3>
-              </div>
-              <h2 className="text-3xl font-display font-bold">The Story of Heim × Energi</h2>
-              <p className="mt-4 text-heim-ice/50 text-sm tracking-wide">CLICK HEADINGS TO EXPAND</p>
-            </motion.div>
-            
-            <Manifesto />
-           </div>
+        {/* MANIFESTO SECTION - 12345 */}
+        <section className="py-24 px-6 relative z-20">
+           <Manifesto />
         </section>
 
         {/* CONCEPT DECONSTRUCTION */}
-        <section id="concept" className="py-24 px-6 bg-heim-iron/30 backdrop-blur-sm border-y border-white/5">
+        <section id="concept" className="py-24 px-6 bg-heim-fjord/30 border-y border-white/5">
           <div className="container mx-auto">
             <motion.div 
               initial="hidden"
               whileInView="visible"
-              viewport={{ once: true }}
+              viewport={{ once: true, amount: 0.2 }}
               variants={fadeIn}
               className="mb-16 text-center"
             >
-              <h3 className="text-sm font-bold text-heim-aurora uppercase tracking-widest mb-2">Deconstruction</h3>
+              <h3 className="text-sm font-bold text-heim-aurora uppercase tracking-widest mb-2">Core Concept</h3>
               <h2 className="text-3xl font-display font-bold">Logo Anatomy</h2>
             </motion.div>
 
@@ -345,7 +386,7 @@ const App: React.FC = () => {
               variants={staggerContainer}
               initial="hidden"
               whileInView="visible"
-              viewport={{ once: true }}
+              viewport={{ once: true, amount: 0.1 }}
               className="grid grid-cols-1 md:grid-cols-3 gap-8"
             >
               {BRAND_ELEMENTS.map((el) => (
@@ -376,7 +417,7 @@ const App: React.FC = () => {
           <motion.div 
             initial="hidden"
             whileInView="visible"
-            viewport={{ once: true }}
+            viewport={{ once: true, amount: 0.2 }}
             variants={fadeIn}
             className="mb-16"
           >
@@ -388,7 +429,7 @@ const App: React.FC = () => {
             variants={staggerContainer}
             initial="hidden"
             whileInView="visible"
-            viewport={{ once: true }}
+            viewport={{ once: true, amount: 0.1 }}
             className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4"
           >
             {BRAND_COLORS.map((color) => (
