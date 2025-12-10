@@ -1,5 +1,5 @@
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { HelpCircle, Check, Edit2, Trash2, Plus, MessageSquare, ClipboardList } from 'lucide-react';
 
@@ -70,15 +70,33 @@ const EditableField: React.FC<EditableFieldProps> = ({
   );
 };
 
+const DEFAULT_PROBLEMS: ProblemEntry[] = [
+  {
+    id: 1,
+    question: "如何定義 Heim × Energi 的核心受眾？",
+    answer: "主要針對對永續發展、跨文化交流感興趣的青年學生（工程與人文背景兼具）。我們希望吸引的是「參與者」而非單純的「旁觀者」。",
+    isLocked: true
+  }
+];
+
 export const ProblemLog: React.FC = () => {
-  const [problems, setProblems] = useState<ProblemEntry[]>([
-    {
-      id: 1,
-      question: "如何定義 Heim × Energi 的核心受眾？",
-      answer: "主要針對對永續發展、跨文化交流感興趣的青年學生（工程與人文背景兼具）。我們希望吸引的是「參與者」而非單純的「旁觀者」。",
-      isLocked: true
+  // Initialize state from localStorage or use default
+  const [problems, setProblems] = useState<ProblemEntry[]>(() => {
+    try {
+      const saved = localStorage.getItem('heim-problem-log');
+      if (saved) {
+        return JSON.parse(saved);
+      }
+    } catch (e) {
+      console.error("Failed to load problems from local storage", e);
     }
-  ]);
+    return DEFAULT_PROBLEMS;
+  });
+
+  // Save to localStorage whenever problems change
+  useEffect(() => {
+    localStorage.setItem('heim-problem-log', JSON.stringify(problems));
+  }, [problems]);
 
   const addProblem = () => {
     const newId = problems.length > 0 ? Math.max(...problems.map(p => p.id)) + 1 : 1;
@@ -102,7 +120,9 @@ export const ProblemLog: React.FC = () => {
   };
 
   const deleteProblem = (id: number) => {
-    setProblems(problems.filter(p => p.id !== id));
+    if (window.confirm("確定要刪除這條紀錄嗎？")) {
+      setProblems(problems.filter(p => p.id !== id));
+    }
   };
 
   return (

@@ -1,9 +1,9 @@
 
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { TEAMS } from '../constants';
 import { TeamLogo } from './TeamLogo';
-import { User, Users, Award, Shield, Check, Edit2, Plus, Camera, Trash2, X } from 'lucide-react';
+import { User, Users, Award, Shield, Check, Edit2, Plus, Camera, Trash2, X, RefreshCw } from 'lucide-react';
 
 interface Member {
   id: string;
@@ -108,7 +108,12 @@ const AvatarUpload: React.FC<{
     if (file) {
       const reader = new FileReader();
       reader.onloadend = () => {
-        onUpload(reader.result as string);
+        // Simple check to warn about storage limits if image is huge
+        const result = reader.result as string;
+        if (result.length > 500000) { // ~500KB warning
+            console.warn("Image is large, localStorage might fill up.");
+        }
+        onUpload(result);
       };
       reader.readAsDataURL(file);
     }
@@ -146,21 +151,66 @@ const AvatarUpload: React.FC<{
 };
 
 export const OrgChart: React.FC = () => {
-  // State for Captains
-  const [captain, setCaptain] = useState({ name: '', photo: null as string | null, locked: false });
-  const [viceCaptain, setViceCaptain] = useState({ name: '', photo: null as string | null, locked: false });
+  // State for Captains - Init from LocalStorage
+  const [captain, setCaptain] = useState(() => {
+    try {
+      const saved = localStorage.getItem('heim-org-captain');
+      return saved ? JSON.parse(saved) : { name: '', photo: null as string | null, locked: false };
+    } catch(e) { return { name: '', photo: null, locked: false }; }
+  });
 
-  // State for Teams
-  const [teams, setTeams] = useState<Record<string, TeamData>>(
-    TEAMS.reduce((acc, team) => ({
+  const [viceCaptain, setViceCaptain] = useState(() => {
+    try {
+      const saved = localStorage.getItem('heim-org-vice-captain');
+      return saved ? JSON.parse(saved) : { name: '', photo: null as string | null, locked: false };
+    } catch(e) { return { name: '', photo: null, locked: false }; }
+  });
+
+  // State for Teams - Init from LocalStorage with fallback merging
+  const [teams, setTeams] = useState<Record<string, TeamData>>(() => {
+    const defaultTeams = TEAMS.reduce((acc, team) => ({
       ...acc,
       [team.id]: { leader: '', leaderPhoto: null, members: [] }
-    }), {})
-  );
+    }), {});
 
-  const [leaderLocks, setLeaderLocks] = useState<Record<string, boolean>>(
-    TEAMS.reduce((acc, team) => ({ ...acc, [team.id]: false }), {})
-  );
+    try {
+      const saved = localStorage.getItem('heim-org-teams');
+      if (saved) {
+        return { ...defaultTeams, ...JSON.parse(saved) };
+      }
+    } catch (e) {
+      console.error("Failed to load teams", e);
+    }
+    return defaultTeams;
+  });
+
+  const [leaderLocks, setLeaderLocks] = useState<Record<string, boolean>>(() => {
+    const defaultLocks = TEAMS.reduce((acc, team) => ({ ...acc, [team.id]: false }), {});
+    try {
+      const saved = localStorage.getItem('heim-org-leader-locks');
+      if (saved) {
+        return { ...defaultLocks, ...JSON.parse(saved) };
+      }
+    } catch(e) { console.error(e); }
+    return defaultLocks;
+  });
+
+  // Persistence Effects
+  useEffect(() => {
+    localStorage.setItem('heim-org-captain', JSON.stringify(captain));
+  }, [captain]);
+
+  useEffect(() => {
+    localStorage.setItem('heim-org-vice-captain', JSON.stringify(viceCaptain));
+  }, [viceCaptain]);
+
+  useEffect(() => {
+    localStorage.setItem('heim-org-teams', JSON.stringify(teams));
+  }, [teams]);
+
+  useEffect(() => {
+    localStorage.setItem('heim-org-leader-locks', JSON.stringify(leaderLocks));
+  }, [leaderLocks]);
 
   // Handlers
   const handleTeamChange = (teamId: string, field: keyof TeamData, value: any) => {
@@ -191,23 +241,44 @@ export const OrgChart: React.FC = () => {
   };
 
   const removeMember = (teamId: string, memberId: string) => {
-     setTeams(prev => ({
-      ...prev,
-      [teamId]: {
-        ...prev[teamId],
-        members: prev[teamId].members.filter(m => m.id !== memberId)
-      }
-    }));
+    if (window.confirm("確定移除這位成員嗎？")) {
+        setTeams(prev => ({
+          ...prev,
+          [teamId]: {
+            ...prev[teamId],
+            members: prev[teamId].members.filter(m => m.id !== memberId)
+          }
+        }));
+    }
   };
+
+  const resetData = () => {
+    if (window.confirm("確定要重置所有架構圖資料嗎？此操作無法復原。")) {
+        localStorage.removeItem('heim-org-captain');
+        localStorage.removeItem('heim-org-vice-captain');
+        localStorage.removeItem('heim-org-teams');
+        localStorage.removeItem('heim-org-leader-locks');
+        window.location.reload();
+    }
+  }
 
   return (
     <div className="w-full max-w-7xl mx-auto pb-10">
        
-       <div className="text-center mb-12">
+       <div className="text-center mb-12 relative">
           <span className="text-heim-aurora text-xs font-bold uppercase tracking-[0.3em] px-4 py-1 border border-heim-aurora/30 rounded-full">
             Phase 1
           </span>
           <h2 className="text-2xl md:text-3xl font-display font-bold text-white mt-4">前期分組架構圖</h2>
+          
+          {/* Reset Button (Subtle) */}
+          <button 
+            onClick={resetData}
+            className="absolute top-0 right-0 p-2 text-heim-ice/20 hover:text-red-400 transition-colors"
+            title="Reset Data"
+          >
+            <RefreshCw size={16} />
+          </button>
        </div>
 
        {/* Level 1: Command */}
