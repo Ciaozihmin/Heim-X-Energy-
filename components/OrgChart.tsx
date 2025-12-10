@@ -39,18 +39,23 @@ const EditableField: React.FC<EditableFieldProps> = ({
 }) => {
   const [isEditing, setIsEditing] = useState(false);
 
-  // Styles based on variant
+  // Styles based on variant - Updated to use Boxes/Frames for all names
   const styles = {
-    title: "text-2xl font-display font-bold text-white text-center bg-transparent border-b-2 border-transparent focus:border-heim-aurora",
+    // Title: Squad Leaders - Large box
+    title: "text-2xl font-display font-bold text-white text-center bg-white/5 border border-white/10 rounded-lg py-2 px-4 focus:border-heim-aurora transition-colors w-full",
+    
+    // Subtitle: Labels - Keep as text
     subtitle: "text-sm uppercase tracking-widest text-heim-ice/70 text-center bg-transparent border-b border-transparent focus:border-heim-ice",
-    // Added text-center to body
-    body: "text-sm text-gray-200 bg-transparent border-b border-transparent focus:border-white/20 w-full text-center",
-    // Modified card style: removed bg-black/20 to make it transparent
-    card: "w-full text-center bg-transparent hover:bg-white/5 border border-transparent hover:border-white/10 rounded-lg py-2 px-3 focus:outline-none focus:border-heim-aurora transition-colors text-white"
+    
+    // Body: Members - Small box (Card stack style)
+    body: "text-sm text-gray-200 bg-white/5 border border-white/10 rounded-md py-2 px-3 w-full text-center focus:border-heim-aurora hover:border-white/30 transition-all",
+    
+    // Card: Counselors/Group Leaders - Medium box
+    card: "w-full text-center bg-white/5 hover:bg-white/10 border border-white/10 hover:border-white/20 rounded-lg py-2 px-3 focus:outline-none focus:border-heim-aurora transition-colors text-white"
   };
 
   return (
-    <div className={`relative group ${className}`}>
+    <div className={`relative group w-full ${className}`}>
       {isEditing ? (
         <input
           autoFocus
@@ -64,12 +69,13 @@ const EditableField: React.FC<EditableFieldProps> = ({
       ) : (
         <div 
           onClick={() => setIsEditing(true)}
-          className={`cursor-pointer flex items-center justify-center gap-2 min-h-[1.5em] rounded px-1 transition-colors relative ${styles[variant]} ${variant !== 'card' ? 'group-hover:bg-white/5' : ''}`}
+          className={`cursor-pointer flex items-center justify-center gap-2 min-h-[1.5em] rounded px-1 transition-colors relative ${styles[variant]} ${variant === 'subtitle' ? 'group-hover:bg-white/5' : ''}`}
         >
           {icon && <span className="text-heim-aurora/50 group-hover:text-heim-aurora">{icon}</span>}
           <span className={!value ? "text-white/20 italic" : ""}>
             {value || placeholder}
           </span>
+          {/* Edit icon positioned absolutely to prevent layout shift */}
           <div className="absolute right-2 top-1/2 -translate-y-1/2 opacity-0 group-hover:opacity-50 text-heim-ice pointer-events-none">
              <Edit2 size={10} />
           </div>
@@ -180,7 +186,7 @@ export const OrgChart: React.FC = () => {
       <div className="flex gap-16 md:gap-32 relative z-10 mb-12">
         {counselors.map((name, idx) => (
           <NodeCard key={`counselor-${idx}`} className="border-heim-ice/30">
-            <div className="flex items-center justify-center gap-2 mb-1">
+            <div className="flex items-center justify-center gap-2 mb-2">
                <Swords size={16} className="text-heim-ice" />
                <span className="text-xs text-heim-ice uppercase tracking-widest font-bold">Counselor</span>
             </div>
@@ -207,7 +213,7 @@ export const OrgChart: React.FC = () => {
         
         {/* Squad Leader */}
         <NodeCard glowing className="min-w-[240px] py-6">
-          <div className="flex items-center justify-center gap-2 mb-2">
+          <div className="flex items-center justify-center gap-2 mb-3">
              <Crown size={16} className="text-heim-aurora" />
              <span className="text-xs text-heim-aurora uppercase tracking-widest font-bold">Squad Leader</span>
           </div>
@@ -221,7 +227,7 @@ export const OrgChart: React.FC = () => {
 
         {/* Vice Leader */}
         <NodeCard className="min-w-[240px] py-6 border-white/20">
-          <div className="flex items-center justify-center gap-2 mb-2">
+          <div className="flex items-center justify-center gap-2 mb-3">
              <Star size={14} className="text-gray-400" />
              <span className="text-xs text-gray-400 uppercase tracking-widest font-bold">Vice Leader</span>
           </div>
@@ -272,7 +278,7 @@ export const OrgChart: React.FC = () => {
 
               {/* Leader */}
               <div className="p-4 border-b border-white/5 bg-heim-aurora/5">
-                <div className="flex items-center justify-center gap-2 mb-1">
+                <div className="flex items-center justify-center gap-2 mb-2">
                    <Sparkles size={12} className="text-heim-aurora" />
                    <span className="text-[10px] uppercase font-bold text-heim-aurora tracking-wider">Group Leader</span>
                 </div>
@@ -298,9 +304,8 @@ export const OrgChart: React.FC = () => {
                         initial={{ opacity: 0, height: 0 }}
                         animate={{ opacity: 1, height: 'auto' }}
                         exit={{ opacity: 0, height: 0 }}
-                        className="flex items-center gap-2 group/member justify-center"
+                        className="flex items-center justify-center group/member relative"
                       >
-                         <div className="w-1.5 h-1.5 rounded-full bg-heim-ice/30 flex-shrink-0" />
                          <EditableField 
                             value={member.name}
                             placeholder="組員姓名"
@@ -309,9 +314,9 @@ export const OrgChart: React.FC = () => {
                          />
                          <button 
                            onClick={() => removeMember(team.id, member.id)}
-                           className="opacity-0 group-hover/member:opacity-100 p-1 hover:text-red-400 transition-opacity"
+                           className="absolute -right-2 top-1/2 -translate-y-1/2 opacity-0 group-hover/member:opacity-100 p-1.5 bg-black/50 rounded-full text-red-400 hover:text-red-300 hover:bg-red-500/20 transition-all z-10"
                          >
-                           <Trash2 size={12} />
+                           <Trash2 size={10} />
                          </button>
                       </motion.div>
                     ))}
